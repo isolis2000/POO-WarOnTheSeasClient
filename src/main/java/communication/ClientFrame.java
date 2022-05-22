@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Client;
+package communication;
 
 import Commands.BaseCommand;
 import Commands.CommandFactory;
@@ -26,7 +26,7 @@ public class ClientFrame extends javax.swing.JFrame {
      */
     public ClientFrame() {
         initComponents();
-        client = new Client(this);
+        client = new Client();
     }
     
     public void showClientMessage(String msg){
@@ -105,7 +105,7 @@ public class ClientFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnectActionPerformed
-        this.client.connect();
+        this.client.connect("name");
     }//GEN-LAST:event_btnConnectActionPerformed
 
     private void btnSend1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSend1ActionPerformed

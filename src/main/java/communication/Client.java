@@ -1,89 +1,56 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package communication;
 
-import java.io.*;
-import java.net.*;
+import gui.MainScreen;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import main.GameMaster;
 
-// el cliente se conecta al servidor por edio del socket, el cual va
-// al IP del server y al puerto del server
+/**
+ *
+ * @author diemo
+ */
 public class Client {
-
-    // es el socket del cliente, el cual el servidor obtiene
-    // cuando el cliente se conecta por medio de la instrucción
-    // accept() del Servidor (ServerSocket)
-    private Socket socket;
-    private int firstPort = 35557;
-
-    public Client(String name) {
+    private final int PORT = 35500;
+    private final String SERVER_IP = "localhost";
+    public Socket socket;
+    public ObjectOutputStream writer;
+    private DataOutputStream outStream;
+    private boolean isConnected = false;
+    private ThreadClient theadClient;
+    
+    public void connect(String name){
         try {
-            //Se crea el socket cliente "192.168.21.103" 
-            //127.0.0.1 es igual al localhost
-
-            int port = initSocket(name);
+            if (!isConnected){
+                this.socket = new Socket(SERVER_IP, PORT);
+//                this.writer = new ObjectOutputStream(socket.getOutputStream());
+                System.out.println("1");
+                this.outStream = new DataOutputStream(socket.getOutputStream());
+                System.out.println("2");
+                GameMaster.getGM().getMainScreen().showClientMessage(name);
+                System.out.println("3");
+                outStream.writeUTF(name);
+                System.out.println("4");
+                this.theadClient = new ThreadClient();
+                System.out.println("5");
+                this.theadClient.start();
+                System.out.println("6");
+                this.isConnected = true;
+                System.out.println("7");
+            }
+            //threadClient
+        } catch (IOException ex) {
             
-//
-//            /**
-//             * Se lee un entero y un String que nos envía el servidor,
-//             * escribiendo el resultado en pantalla
-//             */
-//            System.out.println("Recibido " + buffer.readInt());
-//            System.out.println("Recibido " + buffer.readUTF());
-//            System.out.println("Recibido " + buffer.readBoolean());
-//             
-//
-//
-//             
-//////             /* Se obtiene un stream de lectura para leer objetos */
-//            ObjectInputStream bufferObjetos
-//                    = new ObjectInputStream(socket.getInputStream());
-////////
-////////             /* Se lee un Datosocket que nos envía el servidor y se muestra
-////////              * en pantalla */
-////////
-//////
-//            POJO dato = (POJO) bufferObjetos.readObject();
-//            System.out.println("Recibido " + dato.d + "  " + dato.c);
-////
-////
-////             //Respuesta
-//            DataOutputStream salida = new DataOutputStream(socket.getOutputStream());
-//            salida.writeUTF("Recibidos los datos ... Cerramos la conexión");
-//            System.out.println("Enviado mensaje al server");
-////             
-            socket = new Socket("localhost", port);
-
-        } catch (Exception e) {
-            System.out.println("EXCEP:" + e.getMessage());
         }
-    }
-
-    private int initSocket(String name) throws IOException {
-        Socket socket = new Socket("localhost", firstPort);
-        System.out.println("conectado");
-        //out
-        DataOutputStream outStream = new DataOutputStream(socket.getOutputStream());
-        outStream.writeUTF(name);
-
-        //in
-        /* Se obtiene un stream de lectura para leer tipos simples de java */
-        DataInputStream inStream = new DataInputStream(socket.getInputStream());
-        return inStream.readInt();
     }
     
-    public String sendCommand(String command) {
-        String response = "";
-        try {
-            DataOutputStream outStream = new DataOutputStream(socket.getOutputStream());
-            outStream.writeUTF(command);
-            DataInputStream inStream = new DataInputStream(socket.getInputStream());
-            response = inStream.readUTF();
-        } catch (IOException ex) {
-            System.out.println(ex);
-        }
-        return response;
-    }
-
+    
 }

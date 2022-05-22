@@ -7,7 +7,11 @@ package gui;
 import Commands.BaseCommand;
 import Commands.CommandFactory;
 import Utils.CommandUtils;
+import java.awt.GridLayout;
 import java.io.IOException;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import main.GameMaster;
 
 /**
  *
@@ -15,11 +19,15 @@ import java.io.IOException;
  */
 public class MainScreen extends javax.swing.JFrame {
 
+    private Cell[][] cells = new Cell[20][30];
+    private int boardHeight, boardWidth;
+
     /**
      * Creates new form NewJFrame
      */
     public MainScreen() {
         initComponents();
+        initClient();
     }
 
     /**
@@ -162,11 +170,11 @@ public class MainScreen extends javax.swing.JFrame {
         pnlCommands.setLayout(pnlCommandsLayout);
         pnlCommandsLayout.setHorizontalGroup(
             pnlCommandsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
             .addGroup(pnlCommandsLayout.createSequentialGroup()
                 .addComponent(txfCommand, javax.swing.GroupLayout.PREFERRED_SIZE, 1187, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSend, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(btnSend, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE))
+            .addComponent(jScrollPane1)
         );
         pnlCommandsLayout.setVerticalGroup(
             pnlCommandsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,7 +195,7 @@ public class MainScreen extends javax.swing.JFrame {
         pnlBoard.setLayout(pnlBoardLayout);
         pnlBoardLayout.setHorizontalGroup(
             pnlBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 544, Short.MAX_VALUE)
         );
         pnlBoardLayout.setVerticalGroup(
             pnlBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,7 +215,7 @@ public class MainScreen extends javax.swing.JFrame {
         txaAttackResults.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         txaAttackResults.setForeground(new java.awt.Color(255, 255, 255));
         txaAttackResults.setRows(5);
-        txaAttackResults.setText("Resultado del ataque:");
+        txaAttackResults.setText("Resultado del ataque:\n");
         txaAttackResults.setBorder(null);
         txaAttackResults.setFocusable(false);
         jScrollPane2.setViewportView(txaAttackResults);
@@ -220,7 +228,7 @@ public class MainScreen extends javax.swing.JFrame {
         txaLogs.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         txaLogs.setForeground(new java.awt.Color(255, 255, 255));
         txaLogs.setRows(5);
-        txaLogs.setText("Bitacora: ");
+        txaLogs.setText("Bitacora: \n");
         txaLogs.setBorder(null);
         txaLogs.setFocusable(false);
         jScrollPane3.setViewportView(txaLogs);
@@ -253,7 +261,7 @@ public class MainScreen extends javax.swing.JFrame {
         );
         pnlRightLayout.setVerticalGroup(
             pnlRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 535, Short.MAX_VALUE)
+            .addGap(0, 537, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
@@ -268,8 +276,8 @@ public class MainScreen extends javax.swing.JFrame {
                         .addComponent(pnlLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pnlBoard, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
-                            .addComponent(pnlGameData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(pnlGameData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pnlBoard, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -277,18 +285,16 @@ public class MainScreen extends javax.swing.JFrame {
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMainLayout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(10, Short.MAX_VALUE)
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
-                        .addGap(0, 3, Short.MAX_VALUE)
-                        .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(pnlMainLayout.createSequentialGroup()
-                                .addComponent(pnlBoard, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(pnlGameData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(pnlLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 15, Short.MAX_VALUE)
+                    .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(pnlMainLayout.createSequentialGroup()
+                            .addComponent(pnlBoard, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(pnlGameData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(pnlLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pnlRight, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(pnlCommands, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -324,21 +330,44 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendActionPerformed
         String comando = txfCommand.getText().trim();
-        if (!comando.equals("")){
+        if (!comando.equals("")) {
             String array[] = CommandUtils.convertToArray(comando);
             BaseCommand newCommand = CommandFactory.getCommand(array[0], array);
-            if (newCommand.getCommandName().toUpperCase().equals("ERROR"))
+            if (newCommand.getCommandName().toUpperCase().equals("ERROR")) {
                 showClientMessage(newCommand.executeOnClient());
-            else{
-            try {
-                    client.writer.writeObject(newCommand);
-                } catch (IOException ex) {}
+            } else {
+                try {
+                    GameMaster.getGM().getThreadClient().getWriter().writeObject(newCommand);
+                } catch (IOException ex) {
+                }
             }
-        } 
+        }
     }//GEN-LAST:event_btnSendActionPerformed
 
+    private void initBoard() {
+        boardHeight = pnlBoard.getHeight()/20;
+        boardWidth = pnlBoard.getWidth()/30;
+        pnlBoard.setLayout(new GridLayout(20, 30));
+        for (Cell[] row : cells) {
+            for (Cell cell : row) {
+                System.out.println("cell");
+            }
+        }
+    }
     
-    public void start(){
+    private void initClient() {
+        GameMaster.getGM().setMainScreen(this);
+        String name = JOptionPane.showInputDialog("Escriba su nombre por favor");
+        GameMaster.getGM().setClient();
+        GameMaster.getGM().setPlayerName(name);
+        GameMaster.getGM().getClient().connect(name);
+    }
+
+    public void showClientMessage(String msg) {
+        this.txaLogs.append(msg + "\n");
+    }
+
+    public static void start() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.

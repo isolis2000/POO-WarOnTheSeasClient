@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Client;
+package communication;
 
 import Commands.BaseCommand;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import main.GameMaster;
 import models.Message;
 
 /**
@@ -19,18 +20,34 @@ import models.Message;
  * @author diemo
  */
 public class ThreadClient extends Thread{
-    Client client;
-    //ObjectOutputStream writer;
-    ObjectInputStream reader;
+    private ObjectOutputStream writer;
+    private ObjectInputStream reader;
     private boolean isRunning = true;
 
-    public ThreadClient(Client client) {
-        this.client = client;
+    public ThreadClient() {
         try {
-            reader = new ObjectInputStream(client.socket.getInputStream());
+            writer = new ObjectOutputStream(GameMaster.getGM().getClient().socket.getOutputStream());
+            reader = new ObjectInputStream(GameMaster.getGM().getClient().socket.getInputStream());
+            GameMaster.getGM().setThreadClient(this);
         } catch (IOException ex) {
             //Logger.getLogger(ThreadClient.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public ObjectOutputStream getWriter() {
+        return writer;
+    }
+
+    public void setWriter(ObjectOutputStream writer) {
+        this.writer = writer;
+    }
+
+    public ObjectInputStream getReader() {
+        return reader;
+    }
+
+    public void setReader(ObjectInputStream reader) {
+        this.reader = reader;
     }
     
     
@@ -41,11 +58,12 @@ public class ThreadClient extends Thread{
             
             try {
                 readMessage = (BaseCommand)this.reader.readObject();
+                System.out.println("port: " + GameMaster.getGM().getClient().socket.getPort());
             } catch (IOException ex) {    
             } catch (ClassNotFoundException ex) {}
             
             
-            client.screenRef.showClientMessage(readMessage.executeOnClient());
+            GameMaster.getGM().getMainScreen().showClientMessage(readMessage.executeOnClient());
             
 //            if (readMessage.getName().toUpperCase().equals("CHAT")){
 //                System.out.println("recibido " + readMessage.toString());
